@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jack O'Sullivan Ramos — Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #FAFAFA;
+            --bg-card: #FFFFFF;
+            --text: #1A1A1A;
+            --text-muted: #666666;
+            --accent: #2563EB;
+            --accent-light: #EFF6FF;
+            --border: #E5E7EB;
+            --heading: 'Fraunces', Georgia, serif;
+            --body: 'DM Sans', -apple-system, sans-serif;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--body);
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(250,250,250,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100; padding: 0 2rem;
+        }
+        nav .nav-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+            height: 64px;
+        }
+        nav .logo {
+            font-family: var(--heading);
+            font-weight: 700; font-size: 1.15rem;
+            color: var(--text); text-decoration: none;
+        }
+        nav .nav-links { display: flex; gap: 2rem; list-style: none; }
+        nav .nav-links a {
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.9rem; font-weight: 500; transition: color 0.2s;
+        }
+        nav .nav-links a:hover { color: var(--accent); }
+
+        .hero {
+            padding: 10rem 2rem 5rem;
+            max-width: 1100px; margin: 0 auto;
+        }
+        .hero-label {
+            font-size: 0.85rem; font-weight: 500;
+            color: var(--accent); letter-spacing: 0.08em;
+            text-transform: uppercase; margin-bottom: 1.2rem;
+        }
+        .hero h1 {
+            font-family: var(--heading);
+            font-size: clamp(2.4rem, 5vw, 3.6rem);
+            font-weight: 700; line-height: 1.2;
+            margin-bottom: 1.5rem; max-width: 700px;
+        }
+        .hero p {
+            color: var(--text-muted); font-size: 1.1rem;
+            max-width: 580px; line-height: 1.8;
+        }
+
+        section { padding: 5rem 2rem; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .section-label {
+            font-size: 0.8rem; font-weight: 600;
+            color: var(--accent); letter-spacing: 0.1em;
+            text-transform: uppercase; margin-bottom: 0.8rem;
+        }
+        .section-title {
+            font-family: var(--heading);
+            font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+            font-weight: 700; margin-bottom: 1rem;
+        }
+        .section-subtitle {
+            color: var(--text-muted); font-size: 1.05rem;
+            max-width: 600px; margin-bottom: 3rem;
+        }
+
+        .project-grid {
+            display: flex; flex-direction: column; gap: 1.5rem;
+        }
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-decoration: none; color: inherit;
+            transition: box-shadow 0.3s, transform 0.3s;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center; gap: 2rem;
+        }
+        .project-card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            transform: translateY(-3px);
+        }
+        .project-card .tag {
+            display: inline-block;
+            font-size: 0.75rem; font-weight: 600;
+            padding: 0.3rem 0.8rem; border-radius: 100px;
+            margin-bottom: 0.8rem;
+        }
+        .tag-cyber { background: #FEF2F2; color: #DC2626; }
+        .tag-darktech { background: var(--accent-light); color: var(--accent); }
+        .project-card h3 {
+            font-family: var(--heading);
+            font-size: 1.4rem; font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .project-card p {
+            color: var(--text-muted); font-size: 0.95rem;
+            line-height: 1.7; max-width: 600px;
+        }
+        .project-card .tech {
+            color: var(--text-muted); font-size: 0.8rem;
+            margin-top: 0.8rem; font-weight: 500;
+        }
+        .project-card .arrow {
+            font-size: 1.5rem; color: var(--border);
+            transition: color 0.2s, transform 0.2s;
+        }
+        .project-card:hover .arrow {
+            color: var(--accent); transform: translateX(4px);
+        }
+
+        .skills-section {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .skills-list {
+            display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem;
+        }
+        .skill-tag {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 0.45rem 1rem; border-radius: 100px;
+            font-size: 0.85rem; font-weight: 500;
+            color: var(--text); transition: all 0.2s;
+        }
+        .skill-tag:hover {
+            border-color: var(--accent);
+            color: var(--accent); background: var(--accent-light);
+        }
+
+        footer {
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted); font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .project-card { grid-template-columns: 1fr; }
+            .project-card .arrow { display: none; }
+            nav .nav-links { gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="logo">Jack O'Sullivan Ramos</a>
+        <ul class="nav-links">
+            <li><a href="#about">Over mij</a></li>
+            <li><a href="#projects">Projecten</a></li>
+            <li><a href="#skills">Skills</a></li>
+        </ul>
+    </div>
+</nav>
+
+<section class="hero" id="about">
+    <p class="hero-label">Portfolio</p>
+    <h1>Jack O'Sullivan Ramos</h1>
+    <p>Derdejaars HBO-ICT Cybersecurity student aan de HvA. Dit semester volg ik het themasemester Dark Tech als Creative Technologist. Ik heb ervaring met full-stack development, beveiliging, en backend-architectuur.</p>
+</section>
+
+<section id="projects">
+    <div class="container">
+        <p class="section-label">Projecten</p>
+        <h2 class="section-title">Waar ik aan heb gewerkt</h2>
+        <p class="section-subtitle">Een selectie van projecten die laten zien hoe ik gegroeid ben als developer.</p>
+
+        <div class="project-grid">
+            <a href="vibration-sensor.html" class="project-card">
+                <div>
+                    <span class="tag tag-darktech">Dark Tech — Defensie</span>
+                    <h3>Vibration Sensor System</h3>
+                    <p>Backend voor een vibratiesensor die activiteit rond gebouwen detecteert. Database-ontwerp, API-endpoints en serverinfrastructuur voor een team van 5.</p>
+                    <div class="tech">FastAPI · SQLAlchemy · SQLite · NginX · Tailscale</div>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+
+            <a href="secret-manager.html" class="project-card">
+                <div>
+                    <span class="tag tag-cyber">Cybersecurity</span>
+                    <h3>Secret Manager</h3>
+                    <p>Een webapp waarmee gebruikers hun persoonlijke geheimen veilig kunnen opslaan. Volledig zelfstandig gebouwd met authenticatie en database-integratie.</p>
+                    <div class="tech">HTML/CSS · Flask · MySQL · Docker</div>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+
+            <a href="ctf.html" class="project-card">
+                <div>
+                    <span class="tag tag-cyber">Cybersecurity</span>
+                    <h3>XSS Capture The Flag</h3>
+                    <p>Een CTF-challenge die eruitzag als een YouTube-commentaarsectie. Ontworpen om XSS-kwetsbaarheden te demonstreren en testen.</p>
+                    <div class="tech">HTML/CSS · Flask · MySQL · Docker</div>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="skills-section" id="skills">
+    <div class="container">
+        <p class="section-label">Skills</p>
+        <h2 class="section-title">Technologieën & vaardigheden</h2>
+        <p class="section-subtitle">Tools en technologieën die ik heb gebruikt in mijn projecten.</p>
+        <div class="skills-list">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">FastAPI</span>
+            <span class="skill-tag">Flask</span>
+            <span class="skill-tag">SQLAlchemy</span>
+            <span class="skill-tag">SQLite</span>
+            <span class="skill-tag">PostgreSQL</span>
+            <span class="skill-tag">MySQL</span>
+            <span class="skill-tag">HTML / CSS</span>
+            <span class="skill-tag">Docker</span>
+            <span class="skill-tag">NginX</span>
+            <span class="skill-tag">Tailscale</span>
+            <span class="skill-tag">Git / GitLab</span>
+            <span class="skill-tag">REST API Design</span>
+            <span class="skill-tag">Database Design</span>
+            <span class="skill-tag">XSS / Pentesting</span>
+            <span class="skill-tag">Pydantic v2</span>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>Jack O'Sullivan Ramos — HBO-ICT Cybersecurity — HvA — 2026</p>
+</footer>
+
+</body>
+</html>

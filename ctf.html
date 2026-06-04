@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSS Capture The Flag — Jack O'Sullivan Ramos</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #FAFAFA; --bg-card: #FFFFFF; --text: #1A1A1A;
+            --text-muted: #666666; --accent: #2563EB; --accent-light: #EFF6FF;
+            --border: #E5E7EB;
+            --heading: 'Fraunces', Georgia, serif;
+            --body: 'DM Sans', -apple-system, sans-serif;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--body); color: var(--text); background: var(--bg); line-height: 1.7; font-size: 16px; }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(250,250,250,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; }
+        nav .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 64px; }
+        nav .logo { font-family: var(--heading); font-weight: 700; font-size: 1.15rem; color: var(--text); text-decoration: none; }
+        nav .back { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+        nav .back:hover { color: var(--accent); }
+
+        .hero { padding: 8rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
+        .hero .tag { display: inline-block; background: #FEF2F2; color: #DC2626; font-size: 0.8rem; font-weight: 600; padding: 0.35rem 0.9rem; border-radius: 100px; margin-bottom: 1.2rem; }
+        .hero h1 { font-family: var(--heading); font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; line-height: 1.2; margin-bottom: 1.2rem; }
+        .hero > p { color: var(--text-muted); font-size: 1.05rem; max-width: 640px; line-height: 1.8; }
+        .meta-row { display: flex; gap: 3rem; margin-top: 2rem; flex-wrap: wrap; }
+        .meta-item .label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem; }
+        .meta-item .value { font-weight: 600; font-size: 0.95rem; }
+
+        section { padding: 4rem 2rem; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .section-label { font-size: 0.8rem; font-weight: 600; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.8rem; }
+        .section-title { font-family: var(--heading); font-size: clamp(1.6rem, 3vw, 2rem); font-weight: 700; margin-bottom: 0.8rem; }
+        .section-text { color: var(--text-muted); font-size: 0.95rem; max-width: 640px; margin-bottom: 2rem; line-height: 1.8; }
+
+        .how-it-works { display: flex; flex-direction: column; gap: 1.5rem; }
+        .how-step { display: flex; gap: 1.5rem; align-items: flex-start; }
+        .how-num { min-width: 44px; height: 44px; background: #DC2626; color: white; border-radius: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .how-content h3 { font-family: var(--heading); font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .how-content p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
+
+        .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .concept-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; }
+        .concept-card .icon { font-size: 1.5rem; margin-bottom: 1rem; }
+        .concept-card h3 { font-family: var(--heading); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; }
+        .concept-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
+
+        .tech-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+        .tech-tag { background: var(--bg); border: 1px solid var(--border); padding: 0.4rem 0.9rem; border-radius: 100px; font-size: 0.82rem; font-weight: 500; }
+
+        .alt-section { background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+        footer { padding: 3rem 2rem; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+
+        @media (max-width: 768px) {
+            .how-step { flex-direction: column; gap: 0.8rem; }
+            .meta-row { gap: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="logo">Jack O'Sullivan Ramos</a>
+        <a href="index.html" class="back">← Terug naar portfolio</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <span class="tag">Cybersecurity</span>
+    <h1>XSS Capture The Flag</h1>
+    <p>Een zelfgebouwde CTF-challenge die eruitzag als een YouTube-commentaarsectie. Ontworpen om Cross-Site Scripting (XSS) kwetsbaarheden te demonstreren in een herkenbare omgeving.</p>
+    <div class="meta-row">
+        <div class="meta-item"><div class="label">Rol</div><div class="value">Solo project</div></div>
+        <div class="meta-item"><div class="label">Periode</div><div class="value">Jaar 1 — 2024</div></div>
+        <div class="meta-item"><div class="label">Stack</div><div class="value">Flask · MySQL · Docker</div></div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <p class="section-label">Hoe het werkt</p>
+        <h2 class="section-title">De challenge</h2>
+        <p class="section-text">De deelnemer ziet een pagina die eruitziet als een YouTube-commentaarsectie. Het doel: vind en exploiteer de XSS-kwetsbaarheid om de flag te bemachtigen.</p>
+        <div class="how-it-works">
+            <div class="how-step">
+                <div class="how-num">1</div>
+                <div class="how-content">
+                    <h3>De omgeving verkennen</h3>
+                    <p>De deelnemer opent de pagina en ziet een YouTube-achtige commentaarsectie waar je reacties kunt plaatsen.</p>
+                </div>
+            </div>
+            <div class="how-step">
+                <div class="how-num">2</div>
+                <div class="how-content">
+                    <h3>XSS payload injecteren</h3>
+                    <p>Door een script tag in het commentaarveld te plaatsen wordt duidelijk dat de input niet gesanitiseerd wordt — de kwetsbaarheid is gevonden.</p>
+                </div>
+            </div>
+            <div class="how-step">
+                <div class="how-num">3</div>
+                <div class="how-content">
+                    <h3>Flag capturen</h3>
+                    <p>Een succesvolle XSS-aanval stuurt de deelnemer door naar een andere pagina waar de flag wordt getoond.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="alt-section">
+    <div class="container">
+        <p class="section-label">Concepten</p>
+        <h2 class="section-title">Wat dit project demonstreert</h2>
+        <p class="section-text">Dit project combineert offensieve security kennis met webdevelopment.</p>
+        <div class="concept-grid">
+            <div class="concept-card">
+                <div class="icon">🛡️</div>
+                <h3>XSS kwetsbaarheden</h3>
+                <p>Begrip van hoe Cross-Site Scripting werkt, waarom het gevaarlijk is, en hoe het in de praktijk kan worden uitgebuit.</p>
+            </div>
+            <div class="concept-card">
+                <div class="icon">🎯</div>
+                <h3>CTF ontwerp</h3>
+                <p>Een realistische, herkenbare omgeving creëren die deelnemers uitdaagt om kwetsbaarheden te vinden zonder dat het te makkelijk of te moeilijk is.</p>
+            </div>
+            <div class="concept-card">
+                <div class="icon">🌐</div>
+                <h3>Webdevelopment</h3>
+                <p>Full-stack applicatie met Flask backend, MySQL database en een frontend die YouTube's UI nabootst.</p>
+            </div>
+        </div>
+        <div class="tech-list">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Flask</span>
+            <span class="tech-tag">HTML / CSS</span>
+            <span class="tech-tag">MySQL</span>
+            <span class="tech-tag">Docker</span>
+            <span class="tech-tag">XSS</span>
+            <span class="tech-tag">Pentesting</span>
+            <span class="tech-tag">Input Sanitization</span>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>Jack O'Sullivan Ramos — HBO-ICT Cybersecurity — HvA — 2026</p>
+</footer>
+
+</body>
+</html>
